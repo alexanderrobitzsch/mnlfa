@@ -1,5 +1,5 @@
 ## File Name: mnlfa_mstep_item_2pl.R
-## File Version: 0.497
+## File Version: 0.507
 
 
 mnlfa_mstep_item_2pl <- function(y, y_resp, theta, parms, Xdes_int, 
@@ -15,7 +15,7 @@ mnlfa_mstep_item_2pl <- function(y, y_resp, theta, parms, Xdes_int,
     #--- begin iterations M-steps
     while(iterate){    
         parms0 <- parms                
-        for (hh in 1:NH){
+        for (hh in seq_len(NH) ){
             parms_indices <- parms_iterations[[hh]]        
             regular_type <- parms_regular_types[parms_indices][1]
             regular_lam <- parms_regular_lam[parms_indices][1]
@@ -32,7 +32,7 @@ mnlfa_mstep_item_2pl <- function(y, y_resp, theta, parms, Xdes_int,
         iterate <- ! ( ( iter > msteps ) | ( change < conv_mstep ) )    
     }
     #--- end iterations M-steps
-
+    
     #*** penalty values
     res <- mnlfa_penalty_values_item( parms=parms, parms_iterations=parms_iterations, 
                 parms_regular_types=parms_regular_types, parms_regular_lam=parms_regular_lam, 

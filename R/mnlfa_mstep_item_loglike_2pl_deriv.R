@@ -1,5 +1,5 @@
 ## File Name: mnlfa_mstep_item_loglike_2pl_deriv.R
-## File Version: 0.17
+## File Version: 0.185
 
 
 mnlfa_mstep_item_loglike_2pl_deriv <- function(y, y_resp, theta, parms, Xdes_int, Xdes_slo, post,

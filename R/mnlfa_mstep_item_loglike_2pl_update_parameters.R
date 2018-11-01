@@ -1,5 +1,5 @@
 ## File Name: mnlfa_mstep_item_loglike_2pl_update_parameters.R
-## File Version: 0.272
+## File Version: 0.274
 
 
 mnlfa_mstep_item_loglike_2pl_update_parameters <- function(y, y_resp, theta, parms, Xdes_int, 

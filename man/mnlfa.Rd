@@ -1,5 +1,5 @@
 %% File Name: mnlfa.Rd
-%% File Version: 0.316
+%% File Version: 0.319
 
 \name{mnlfa}
 \alias{mnlfa}
@@ -221,6 +221,29 @@ mod3 <- mnlfa::mnlfa( dat=dat, items, item_type="1PL", formula_int=formula_int,
             center_parms=center_parms, regular_lam=regular_lam, regular_type=regular_type,
             maxit=maxit )
 summary(mod3)
+
+
+#***** Model 4: 1PL model with selected moderated item parameters 
+
+#* trait distribution
+formula_mean <- ~0+female+age
+formula_sd <- ~1
+
+#* formulas for item intercepts
+formula_int <- ~1
+formula_int <- mnlfa::mnlfa_expand_to_list(x=formula_int, names_list=items)
+mod_items <- c(4,5,6,7)
+for (ii in mod_items){
+    formula_int[[ii]] <- ~1+female+age
+}
+formula_slo <- ~1
+
+mod4 <- mnlfa::mnlfa( dat=dat, items, item_type=item_type, formula_int=formula_int, 
+              formula_slo=formula_slo, formula_mean=formula_mean, formula_sd=formula_sd, 
+               maxit=maxit )
+mod4$item
+mod4$trait
+summary(mod4)
 }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

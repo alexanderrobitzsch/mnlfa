@@ -1,5 +1,5 @@
 ## File Name: mnlfa_penalty_values_item.R
-## File Version: 0.08
+## File Version: 0.14
 
 
 mnlfa_penalty_values_item <- function(parms, parms_iterations,
@@ -11,7 +11,7 @@ mnlfa_penalty_values_item <- function(parms, parms_iterations,
     parms_values <- mnlfa_create_vector_with_names(vec=parm_names)
     parms_regularized <- parms_values
     parms_estimated <- parms_values
-    for (hh in 1:NH){
+    for (hh in seq_len(NH) ){
         parms_indices <- parms_iterations[[hh]]
         regular_type <- parms_regular_types[parms_indices][1]
         regular_lam <- parms_regular_lam[parms_indices][1]

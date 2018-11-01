@@ -1,5 +1,5 @@
 ## File Name: mnlfa.R
-## File Version: 0.6307
+## File Version: 0.6342
 
 mnlfa <- function( dat, items, item_type="2PL", formula_int=~1, formula_slo=~1,
     formula_mean=~0, formula_sd =~0, theta=NULL, parm_list_init=NULL, 
@@ -42,7 +42,7 @@ mnlfa <- function( dat, items, item_type="2PL", formula_int=~1, formula_slo=~1,
     parms_regular_lam <- res$parms_regular_lam
     parms_iterations <- res$parms_iterations
     parm_index <- res$parm_index
-
+    
     #* inits prior distribution
     if ( is.null(prior_init) ){
         prior <- mnlfa_proc_inits_prior(theta=theta, N=N)
@@ -66,8 +66,10 @@ mnlfa <- function( dat, items, item_type="2PL", formula_int=~1, formula_slo=~1,
         #* compute likelihood    
         like <- matrix(1, nrow=N, ncol=TP)
         for (ii in 1:I){
-            b <- parm_Xdes[[ii]]$Xdes_int %*% parm_list[[ii]]$b
-            a <- parm_Xdes[[ii]]$Xdes_slo %*% parm_list[[ii]]$a    
+            b <- mnlfa_compute_moderated_parameter(Xdes=parm_Xdes[[ii]]$Xdes_int, 
+                        parm=parm_list[[ii]]$b, value=0)
+            a <- mnlfa_compute_moderated_parameter(Xdes=parm_Xdes[[ii]]$Xdes_slo, 
+                        parm=parm_list[[ii]]$a, value=1)
             y <- resp[,ii]
             y_resp <- resp_ind[,ii]
             like_ii <- mnlfa_rcpp_calc_probs_2pl(a=a, b=b, theta=theta, y=y, y_resp=y_resp )
@@ -95,8 +97,10 @@ mnlfa <- function( dat, items, item_type="2PL", formula_int=~1, formula_slo=~1,
             parms <- c(parm_list[[ii]]$b, parm_list[[ii]]$a )        
             b_index <- parm_index[[ii]]$b_index        
             a_index <- parm_index[[ii]]$a_index
+            Xdes_int <- parm_Xdes[[ii]]$Xdes_int
+            Xdes_slo <- parm_Xdes[[ii]]$Xdes_slo
             res <- mnlfa_mstep_item_2pl( y=y, y_resp=y_resp, theta=theta, parms=parms, 
-                        Xdes_int=parm_Xdes[[ii]]$Xdes_int, Xdes_slo=parm_Xdes[[ii]]$Xdes_slo, 
+                        Xdes_int=Xdes_int, Xdes_slo=Xdes_slo, 
                         post=post, b_index=b_index, a_index=a_index, 
                         parms_iterations=parms_iterations[[ii]], h=h, N_item=N_item[ii], 
                         parms_regular_types=parms_regular_types[[ii]], 
@@ -113,7 +117,7 @@ mnlfa <- function( dat, items, item_type="2PL", formula_int=~1, formula_slo=~1,
                 utils::flush.console()
             }
         }
-        
+
         #* parameter centering
         if ( ( ! is.null(center_parms) ) & ( iter <= center_max_iter )  ){
             NL <- length(center_parms)
@@ -133,6 +137,7 @@ mnlfa <- function( dat, items, item_type="2PL", formula_int=~1, formula_slo=~1,
                     a_index <- parm_index[[ii]]$a_index
                     parm_list[[ii]]$b <- parms[ b_index ]
                     parm_list[[ii]]$a <- parms[ a_index ]
+
                     res <- mnlfa_penalty_values_item( parms=parms, 
                                 parms_iterations=parms_iterations[[ii]], 
                                 parms_regular_types=parms_regular_types[[ii]], 
@@ -141,6 +146,7 @@ mnlfa <- function( dat, items, item_type="2PL", formula_int=~1, formula_slo=~1,
                     parms_values[[ii]] <- res$parms_values
                     parms_regularized[[ii]] <- res$parms_regularized
                     parms_estimated[[ii]] <- res$parms_estimated
+                
                 }
             }
         }
@@ -151,7 +157,7 @@ mnlfa <- function( dat, items, item_type="2PL", formula_int=~1, formula_slo=~1,
             cat("\nMaximum change in item parameters", "=", round(parm_change_item,6), "\n")
             utils::flush.console()
         }
-        
+
         #* estimation of trait distribution                
         mu <- parm_trait$mu
         sigma <- parm_trait$sigma
@@ -183,7 +189,7 @@ mnlfa <- function( dat, items, item_type="2PL", formula_int=~1, formula_slo=~1,
         sigma_p <- exp( Xdes_sd %*% parm_trait$sigma )        
         prior <- matrix(1, nrow=N, ncol=TP)        
         for (tt in 1:TP){
-            prior[,tt] <- stats::dnorm(theta[rep(tt,N),1], mu_p[,1], sigma_p[,1] )
+            prior[,tt] <- stats::dnorm(theta[rep(tt,N),1], mean=mu_p[,1], sd=sigma_p[,1] )
         }
         prior <- prior/rowSums(prior)
         
@@ -213,32 +219,13 @@ mnlfa <- function( dat, items, item_type="2PL", formula_int=~1, formula_slo=~1,
     converged <- ( iter <= maxit )
     
     #--- collect all item parameters
-    item <- NULL
-    for (ii in 1:I){
-        parm_ii <- parm_list[[ii]]
-        parm_ii <- c( parm_ii$b , parm_ii$a )
-        item_ii <- paste(items[ii])
-        np_ii <- length(parm_ii)
-        dfr <- data.frame( itemid=ii, intid=1:np_ii, item=rep(item_ii,np_ii), item_type = item_type[ii],
-                        parm = names(parm_ii), est=as.vector(parm_ii), 
-                        estim = parms_estimated[[ii]], regul = parms_regularized[[ii]], 
-                        reg_type=parms_regular_types[[ii]], reg_lam = parms_regular_lam[[ii]],
-                        row.names=NULL )
-        rownames(dfr) <- NULL
-        item <- rbind( item, dfr )    
-    }
-    
+    item <- mnlfa_postproc_item( parm_list=parm_list, items=items, item_type=item_type, 
+                parms_estimated=parms_estimated, parms_regularized=parms_regularized, 
+                parms_regular_types=parms_regular_types, parms_regular_lam=parms_regular_lam )
+
     #-- collect parameters of trait distribution
-    v1 <- parm_trait$mu
-    if ( length(v1) > 0 ){
-        trait <- data.frame(type="mu", par=names(v1), est=v1, estim=TRUE)
-    } else {
-        trait <- data.frame(type="mu", par="mu0", est=0, estim=FALSE)
-    }
-    v1 <- parm_trait$sigma
-    dfr1 <- data.frame(type="sigma", par=names(v1), est=v1, estim=TRUE)
-    trait <- rbind( trait, dfr1)
-    rownames(trait) <- NULL
+    trait <- mnlfa_postproc_trait(parm_trait=parm_trait)
+
 
     #-- information criteria
     ic <- list(deviance=dev, np=numb_est_pars, n=N, numb_reg_pars=numb_reg_pars,
