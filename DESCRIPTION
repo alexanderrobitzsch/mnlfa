@@ -1,8 +1,8 @@
 Package: mnlfa
 Type: Package
 Title: Moderated nonlinear factor analysis
-Version: 0.1-40
-Date: 2018-11-01 19:29:52
+Version: 0.1-41
+Date: 2018-11-02 00:06:41
 Author: Alexander Robitzsch [aut,cre] (<https://orcid.org/0000-0002-8226-3132>)
 Maintainer: Alexander Robitzsch <robitzsch@ipn.uni-kiel.de>
 Description: 

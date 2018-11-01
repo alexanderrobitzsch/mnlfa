@@ -1,5 +1,5 @@
 %% File Name: mnlfa.Rd
-%% File Version: 0.319
+%% File Version: 0.322
 
 \name{mnlfa}
 \alias{mnlfa}
@@ -215,6 +215,7 @@ center_parms <- list( rep(2,I), rep(3,I) )
 
 # regularization parameters for item intercept and item slope, respectively
 regular_lam <- c(.06, .25)
+regular_type <- c("mcp","none")
 
 mod3 <- mnlfa::mnlfa( dat=dat, items, item_type="1PL", formula_int=formula_int, 
             formula_slo=formula_slo, formula_mean=formula_mean, formula_sd=formula_sd, 
@@ -238,7 +239,7 @@ for (ii in mod_items){
 }
 formula_slo <- ~1
 
-mod4 <- mnlfa::mnlfa( dat=dat, items, item_type=item_type, formula_int=formula_int, 
+mod4 <- mnlfa::mnlfa( dat=dat, items, item_type="1PL", formula_int=formula_int, 
               formula_slo=formula_slo, formula_mean=formula_mean, formula_sd=formula_sd, 
                maxit=maxit )
 mod4$item

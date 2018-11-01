@@ -1,5 +1,5 @@
 ## File Name: summary.mnlfa.R
-## File Version: 0.08
+## File Version: 0.09
 
 
 summary.mnlfa <- function( object, file=NULL, ... )
@@ -18,7 +18,7 @@ summary.mnlfa <- function( object, file=NULL, ... )
     #-- print computation time
     CDM::cdm_print_summary_computation_time(object=object)
 
-    cat("Moderated factor analysis\n")
+    cat("Moderated nonlinear factor analysis\n")
 
     cat("\n-----------------------------------------------------------------------------\n")
     cat( "Number of iterations=", object$iter, "\n" )
