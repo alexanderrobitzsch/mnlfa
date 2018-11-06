@@ -1,5 +1,5 @@
 ## File Name: zzz.R
-## File Version: 0.01
+## File Version: 0.03
 
 
 #  zzz.R
@@ -28,3 +28,11 @@ version <- function(pkg="mnlfa")
 #          library.dynam("sirt", package=pkg, lib.loc=lib)
 #          return(invisible(0))
 #        }
+
+xx <- function(f1, f2)
+{
+    v1 <- paste0( rep(" ",f1), collapse="" )
+    v2 <- paste0( rep(" ",f2), collapse="" )
+    res <- paste0( v1, "=", v2)
+    return(res)
+}

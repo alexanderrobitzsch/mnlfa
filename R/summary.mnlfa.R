@@ -1,5 +1,5 @@
 ## File Name: summary.mnlfa.R
-## File Version: 0.09
+## File Version: 0.17
 
 
 summary.mnlfa <- function( object, file=NULL, ... )
@@ -20,18 +20,17 @@ summary.mnlfa <- function( object, file=NULL, ... )
 
     cat("Moderated nonlinear factor analysis\n")
 
-    cat("\n-----------------------------------------------------------------------------\n")
-    cat( "Number of iterations=", object$iter, "\n" )
+    CDM::cat_paste("\n-----------------------------------------------------------------------------\n")
+    CDM::cat_paste("Number of iterations", xx(), object$iter, "\n" )
     if ( ! object$converged ){ cat("Maximum number of iterations was reached.\n") }
 
-    cat( "\nDeviance","=", round( object$deviance, 2 ), " | " )
-    cat( "Log Likelihood","=", round( -object$deviance/2, 2 ), "\n" )
-    cat( "Penalty","=", round( object$regular_penalty, 2 ), "\n" )
+    CDM::cat_paste( "\nDeviance", xx(), round( object$deviance, 2 ), " | " )
+    CDM::cat_paste( "Log Likelihood", xx(), round( -object$deviance/2, 2 ), "\n" )
+    CDM::cat_paste( "Penalty", xx(), round( object$regular_penalty, 2 ), "\n" )
 
-    cat( "Number of persons","=", object$ic$n, "\n" )
-
-    cat( "Number of estimated parameters","=", object$ic$np, "\n" )
-    cat( "Number of regularized parameters","=", object$ic$numb_reg_pars, "\n\n" )
+    CDM::cat_paste( "Number of persons", xx(), object$ic$n, "\n" )
+    CDM::cat_paste( "Number of estimated parameters", xx(), object$ic$np, "\n" )
+    CDM::cat_paste( "Number of regularized parameters", xx(), object$ic$numb_reg_pars, "\n\n" )
 
     #-- information criteria
     CDM::cdm_print_summary_information_criteria(object=object)
@@ -48,7 +47,7 @@ summary.mnlfa <- function( object, file=NULL, ... )
     print( round(obji$mu, digits=4))
     cat("\nLog standard deviation parameters\n")
     print( round(obji$sigma, digits=4))
-        
+
     CDM::csink( file=file )
 }
 #*******************************************************

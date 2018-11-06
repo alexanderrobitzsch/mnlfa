@@ -1,5 +1,5 @@
 ## File Name: mnlfa_convert_to_list.R
-## File Version: 0.04
+## File Version: 0.05
 
 
 mnlfa_convert_to_list <- function(x, I, names_list=NULL, create_list=FALSE)
@@ -13,7 +13,7 @@ mnlfa_convert_to_list <- function(x, I, names_list=NULL, create_list=FALSE)
     }
     if ( ! is.null(names_list) ){
         names(x) <- names_list
-    }    
+    }
     #-- output
     return(x)
 }

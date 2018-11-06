@@ -1,22 +1,22 @@
 ## File Name: mnlfa_proc_data.R
-## File Version: 0.17
+## File Version: 0.20
 
 mnlfa_proc_data <- function(dat, items, item_type, formula_mean, formula_sd, parm_trait_init)
 {
     resp <- dat[,items]
     N <- nrow(resp)
     I <- ncol(resp)
-    if (length(item_type) == 1 ){
+    if (length(item_type)==1 ){
         item_type <- rep(item_type, I)
         names(item_type) <- items
     }
     resp_ind <- ! is.na(resp)
     N_item <- colSums(resp_ind)
     resp[ is.na(resp) ] <- 0
-    
+
     # design matrix predictors trait distribution
     Xdes_mean <- stats::model.matrix( object=formula_mean, data=dat)
-    Xdes_sd <- stats::model.matrix( object=formula_sd, data=dat)    
+    Xdes_sd <- stats::model.matrix( object=formula_sd, data=dat)
     mu <- rep(0,ncol(Xdes_mean))
     n_mu <- length(mu)
     if (n_mu>0){

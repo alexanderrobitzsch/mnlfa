@@ -25,7 +25,7 @@ importFrom(utils, packageDescription)
 #********** Imports (own packages) *****************
 #***************************************************
 
-
+importFrom(CDM, cat_paste)
 importFrom(CDM, cdm_calc_information_criteria)
 importFrom(CDM, cdm_parameter_regularization)
 importFrom(CDM, cdm_penalty_values)

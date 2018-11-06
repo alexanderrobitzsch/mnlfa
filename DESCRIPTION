@@ -1,8 +1,8 @@
 Package: mnlfa
 Type: Package
 Title: Moderated nonlinear factor analysis
-Version: 0.1-41
-Date: 2018-11-02 00:06:41
+Version: 0.1-47
+Date: 2018-11-06 17:18:39
 Author: Alexander Robitzsch [aut,cre] (<https://orcid.org/0000-0002-8226-3132>)
 Maintainer: Alexander Robitzsch <robitzsch@ipn.uni-kiel.de>
 Description: 
@@ -15,7 +15,7 @@ Description:
 Depends:
     R (>= 3.1)
 Imports:
-    CDM (>= 6.5-9), stats, utils
+    CDM (>= 7.0-4), stats, utils
 Suggests:
     sirt
 LinkingTo: 
