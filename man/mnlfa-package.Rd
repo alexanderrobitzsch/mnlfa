@@ -1,5 +1,5 @@
 %% File Name: mnlfa-package.Rd
-%% File Version: 0.09
+%% File Version: 0.11
 
 \name{mnlfa-package}
 % \alias{mnlfa}
@@ -34,11 +34,12 @@ Maintainer: \packageMaintainer{mnlfa}
 
 
 \references{
-Curran, P. J., McGinley, J. S., Bauer, D. J., Hussong, A. M., Burns, A., 
-Chassin, L., Sher, K., & Zucker, R. (2014). 
-A moderated nonlinear factor model for the development of commensurate measures 
+Curran, P. J., McGinley, J. S., Bauer, D. J., Hussong, A. M., Burns, A.,
+Chassin, L., Sher, K., & Zucker, R. (2014).
+A moderated nonlinear factor model for the development of commensurate measures
 in integrative data analysis. \emph{Multivariate Behavioral Research, 49}(3),
 214-231.
+http://dx.doi.org/10.1080/00273171.2014.889594
 }
 
 

@@ -37,15 +37,28 @@ CHANGELOG mnlfa
 
 
 
+------------------------------------------------------------------------
+VERSIONS mnlfa 0.2  |  2019-04-05  |  Last: mnlfa 0.2-1
+------------------------------------------------------------------------
+
+xxx   * ...
+
+DATA  * included/modified datasets: ---
+EXAMP * included/modified examples: ---
+
+
+
+
+
 
 ------------------------------------------------------------------------
-VERSIONS mnlfa 0.1  |  2018-11-06  |  Last: mnlfa 0.1-47
+VERSIONS mnlfa 0.1  |  2019-04-04  |  Last: mnlfa 0.1-53
 ------------------------------------------------------------------------
 
 ADDED * initial release of mnlfa package with 1PL/2PL unidimensional 
         models for dichotomous data
 NOTE  * included utility function mnlfa_expand_to_list()
-
+NOTE  * refer to packages aMNLFA and GPCMlasso in 'Enhances'
 
 DATA  * included/modified datasets: data.mnlfa01
 EXAMP * included/modified examples: mnlfa (1), mnlfa_expand_to_list (1)

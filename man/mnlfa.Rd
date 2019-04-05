@@ -1,5 +1,5 @@
 %% File Name: mnlfa.Rd
-%% File Version: 0.332
+%% File Version: 0.336
 
 \name{mnlfa}
 \alias{mnlfa}
@@ -122,7 +122,7 @@ Item intercepts and item slopes can be moderated by person covariates, i.e.
 \eqn{\bold{\alpha}_i} or \eqn{\bold{\beta}_i} parameters is allowed.
 
 The model is estimated using an EM algorithm with the coordinate descent
-method during the M-step (XXX).
+method during the M-step (Sun et al., 2016).
 }
 
 
@@ -140,8 +140,12 @@ Chassin, L., Sher, K., & Zucker, R. (2014).
 A moderated nonlinear factor model for the development of commensurate measures
 in integrative data analysis. \emph{Multivariate Behavioral Research, 49}(3),
 214-231.
+http://dx.doi.org/10.1080/00273171.2014.889594
 
-ADD MORE REFERENCES
+Sun, J., Chen, Y., Liu, J., Ying, Z., & Xin, T. (2016). Latent variable selection for 
+multidimensional item response theory models via L1 regularization. 
+\emph{Psychometrika, 81}(4), 921-939.
+ https://doi.org/10.1007/s11336-016-9529-6
 }
 
 
@@ -159,10 +163,11 @@ ADD MORE REFERENCES
 See also the \pkg{aMNLFA} package for automatized moderated nonlinear factor analysis
 which provides convenient wrapper functions for automized analysis
 in the \emph{Mplus} software.
+
+See the \pkg{GPCMlasso} package for the regularized generalized partial credit model.
 }
 
 \examples{
-\dontrun{
 #############################################################################
 # EXAMPLE 1: Dichotomous data, 1PL model
 #############################################################################
@@ -174,8 +179,9 @@ dat <- data.mnlfa01
 items <- grep("I[0-9]", colnames(dat), value=TRUE)
 I <- length(items)
 
-# maximum number of iterations
-maxit <- 200
+# maximum number of iterations (use only few iterations for the only purpose of
+# providing CRAN checks)
+maxit <- 10
 
 #***** Model 1: 1PL model without moderating parameters and without covariates for traits
 
@@ -191,6 +197,7 @@ mod1 <- mnlfa::mnlfa( dat=dat, items, item_type="1PL", formula_int=formula_int,
              maxit=maxit )
 summary(mod1)
 
+\donttest{
 #***** Model 2: 1PL model without moderating parameters and with covariates for traits
 
 # covariates for trait
@@ -198,8 +205,7 @@ formula_mean <- ~female + age
 formula_sd <- ~1
 
 mod2 <- mnlfa::mnlfa( dat=dat, items, item_type="1PL", formula_int=formula_int,
-             formula_slo=formula_slo, formula_mean=formula_mean, formula_sd=formula_sd,
-             maxit=maxit )
+             formula_slo=formula_slo, formula_mean=formula_mean, formula_sd=formula_sd)
 summary(mod2)
 
 #***** Model 3: 1PL model with moderating parameters and with covariates for traits
@@ -221,8 +227,7 @@ regular_type <- c("mcp","none")
 
 mod3 <- mnlfa::mnlfa( dat=dat, items, item_type="1PL", formula_int=formula_int,
             formula_slo=formula_slo, formula_mean=formula_mean, formula_sd=formula_sd,
-            center_parms=center_parms, regular_lam=regular_lam, regular_type=regular_type,
-            maxit=maxit )
+            center_parms=center_parms, regular_lam=regular_lam, regular_type=regular_type )
 summary(mod3)
 
 
@@ -242,8 +247,7 @@ for (ii in mod_items){
 formula_slo <- ~1
 
 mod4 <- mnlfa::mnlfa( dat=dat, items, item_type="1PL", formula_int=formula_int,
-              formula_slo=formula_slo, formula_mean=formula_mean, formula_sd=formula_sd,
-               maxit=maxit )
+              formula_slo=formula_slo, formula_mean=formula_mean, formula_sd=formula_sd)
 mod4$item
 mod4$trait
 summary(mod4)

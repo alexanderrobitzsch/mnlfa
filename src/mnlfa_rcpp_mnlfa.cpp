@@ -1,5 +1,5 @@
 //// File Name: mnlfa_rcpp_mnlfa.cpp
-//// File Version: 0.31
+//// File Version: 0.32
 
 
 
@@ -38,8 +38,8 @@ double mnlfa_rcpp_plogis( double x)
 ///** mnlfa_rcpp_calc_probs_2pl
 // [[Rcpp::export]]
 Rcpp::NumericMatrix mnlfa_rcpp_calc_probs_2pl(
-        Rcpp::NumericMatrix a, Rcpp::NumericMatrix b, Rcpp::NumericMatrix theta,
-        Rcpp::IntegerVector y, Rcpp::LogicalVector y_resp )
+    Rcpp::NumericMatrix a, Rcpp::NumericMatrix b, Rcpp::NumericMatrix theta,
+    Rcpp::IntegerVector y, Rcpp::LogicalVector y_resp )
 {
     int N = a.nrow();
     int TP = theta.nrow();
@@ -68,7 +68,7 @@ Rcpp::NumericMatrix mnlfa_rcpp_calc_probs_2pl(
 ///** mnlfa_rcpp_mstep_trait_unidim
 // [[Rcpp::export]]
 double mnlfa_rcpp_mstep_trait_unidim( Rcpp::NumericMatrix theta, Rcpp::NumericMatrix mu_p,
-        Rcpp::NumericMatrix sigma_p, Rcpp::NumericMatrix post)
+    Rcpp::NumericMatrix sigma_p, Rcpp::NumericMatrix post)
 {
     double theta_tt=0;
     double tmp=0;

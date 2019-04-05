@@ -1,8 +1,8 @@
 Package: mnlfa
 Type: Package
-Title: Moderated nonlinear factor analysis
-Version: 0.1-47
-Date: 2018-11-06 17:18:39
+Title: Moderated Nonlinear Factor Analysis
+Version: 0.2-1
+Date: 2019-04-05 13:46:06
 Author: Alexander Robitzsch [aut,cre] (<https://orcid.org/0000-0002-8226-3132>)
 Maintainer: Alexander Robitzsch <robitzsch@ipn.uni-kiel.de>
 Description: 
@@ -16,10 +16,10 @@ Depends:
     R (>= 3.1)
 Imports:
     CDM (>= 7.0-4), stats, utils
-Suggests:
-    sirt
 LinkingTo: 
     Rcpp, RcppArmadillo
+Enhances:
+    aMNLFA, GPCMlasso, sirt
 URL: 
     https://github.com/alexanderrobitzsch/mnlfa,
     https://sites.google.com/site/alexanderrobitzsch2/software
