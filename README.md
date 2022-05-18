@@ -8,7 +8,7 @@ If you use `mnlfa` and have suggestions for improvement or have found bugs, plea
 
 The manual may be found here [https://alexanderrobitzsch.github.io/mnlfa/](https://alexanderrobitzsch.github.io/mnlfa/) 
 
-#### CRAN version `mnlfa` 0.1-53 (2019-04-04)
+#### CRAN version `mnlfa` 0.2-4 (2022-05-17)
 
 
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version-last-release/mnlfa)](https://cran.r-project.org/package=mnlfa)
@@ -22,9 +22,9 @@ The CRAN version can be installed from within R using:
 utils::install.packages("mnlfa")
 ```
 
-#### GitHub version `mnlfa` 0.2-2 (2019-05-10)
+#### GitHub version `mnlfa` 0.3-1 (2022-05-18)
 
-[![](https://img.shields.io/badge/github%20version-0.2--2-orange.svg)](https://github.com/alexanderrobitzsch/mnlfa)&#160;&#160;
+[![](https://img.shields.io/badge/github%20version-0.3--1-orange.svg)](https://github.com/alexanderrobitzsch/mnlfa)&#160;&#160;
 
 The version hosted [here](https://github.com/alexanderrobitzsch/mnlfa) is the development version of `mnlfa`. 
 The GitHub version can be installed using `devtools` as:

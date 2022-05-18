@@ -37,8 +37,9 @@ CHANGELOG mnlfa
 
 
 
+
 ------------------------------------------------------------------------
-VERSIONS mnlfa 0.2  |  2019-05-10  |  Last: mnlfa 0.2-2
+VERSIONS mnlfa 0.3  |  2022-05-18  |  Last: mnlfa 0.3-1
 ------------------------------------------------------------------------
 
 xxx   * ...
@@ -49,7 +50,15 @@ EXAMP * included/modified examples: ---
 
 
 
+------------------------------------------------------------------------
+VERSIONS mnlfa 0.2  |  2022-05-17  |  Last: mnlfa 0.2-4
+------------------------------------------------------------------------
 
+NOTE  * new release on CRAN because mnlfa was removed due to
+        the removal of the dependent CDM package from CRAN
+
+DATA  * included/modified datasets: ---
+EXAMP * included/modified examples: ---
 
 ------------------------------------------------------------------------
 VERSIONS mnlfa 0.1  |  2019-04-04  |  Last: mnlfa 0.1-53

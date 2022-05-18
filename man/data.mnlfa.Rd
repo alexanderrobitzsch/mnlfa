@@ -1,5 +1,5 @@
 %% File Name: data.mnlfa.Rd
-%% File Version: 0.05
+%% File Version: 0.06
 
 \name{data.mnlfa01}
 \alias{data.mnlfa01}
@@ -46,4 +46,4 @@ data(data.mnlfa01)
 
 
 
-\keyword{datasets}
+%% \keyword{datasets}

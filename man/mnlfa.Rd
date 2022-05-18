@@ -1,5 +1,5 @@
 %% File Name: mnlfa.Rd
-%% File Version: 0.336
+%% File Version: 0.337
 
 \name{mnlfa}
 \alias{mnlfa}
@@ -142,8 +142,8 @@ in integrative data analysis. \emph{Multivariate Behavioral Research, 49}(3),
 214-231.
 http://dx.doi.org/10.1080/00273171.2014.889594
 
-Sun, J., Chen, Y., Liu, J., Ying, Z., & Xin, T. (2016). Latent variable selection for 
-multidimensional item response theory models via L1 regularization. 
+Sun, J., Chen, Y., Liu, J., Ying, Z., & Xin, T. (2016). Latent variable selection for
+multidimensional item response theory models via L1 regularization.
 \emph{Psychometrika, 81}(4), 921-939.
  https://doi.org/10.1007/s11336-016-9529-6
 }
