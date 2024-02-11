@@ -1,5 +1,5 @@
 ## File Name: mnlfa.R
-## File Version: 0.6346
+## File Version: 0.641
 
 mnlfa <- function( dat, items, item_type="2PL", formula_int=~1, formula_slo=~1,
     formula_mean=~0, formula_sd=~0, theta=NULL, parm_list_init=NULL,

@@ -38,17 +38,27 @@ CHANGELOG mnlfa
 
 
 
+
 ------------------------------------------------------------------------
-VERSIONS mnlfa 0.3  |  2022-05-18  |  Last: mnlfa 0.3-1
+VERSIONS mnlfa 0.4  |  2024-02-11  |  Last: mnlfa 0.4-2
 ------------------------------------------------------------------------
 
 xxx   * ...
+
 
 DATA  * included/modified datasets: ---
 EXAMP * included/modified examples: ---
 
 
+------------------------------------------------------------------------
+VERSIONS mnlfa 0.3  |  2024-02-11  |  Last: mnlfa 0.3-4
+------------------------------------------------------------------------
 
+NOTE  * minor change in Rd file of mnlfa package (requested by
+        Kurt Hornik)
+
+DATA  * included/modified datasets: ---
+EXAMP * included/modified examples: ---
 
 ------------------------------------------------------------------------
 VERSIONS mnlfa 0.2  |  2022-05-17  |  Last: mnlfa 0.2-4

@@ -1,8 +1,9 @@
 %% File Name: mnlfa-package.Rd
-%% File Version: 0.11
+%% File Version: 0.12
 
 \name{mnlfa-package}
 % \alias{mnlfa}
+\alias{mnlfa-package}
 
 \docType{package}
 
