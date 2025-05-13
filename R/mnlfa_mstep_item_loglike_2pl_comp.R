@@ -1,8 +1,8 @@
 ## File Name: mnlfa_mstep_item_loglike_2pl_comp.R
-## File Version: 0.07
+## File Version: 0.213
 
-mnlfa_mstep_item_loglike_2pl_comp <- function(y, y_resp, theta, b_ii, a_ii, Xdes_int, Xdes_slo,
-        post, N_item, eps=1E-15 )
+mnlfa_mstep_item_loglike_2pl_comp <- function(y, y_resp, theta, b_ii, a_ii, Xdes_int,
+            Xdes_slo, post, N_item, eps=1E-15 )
 {
     b <- Xdes_int %*% b_ii
     a <- Xdes_slo %*% a_ii

@@ -1,5 +1,5 @@
 ## File Name: mnlfa_postproc_item.R
-## File Version: 0.05
+## File Version: 0.071
 
 
 mnlfa_postproc_item <- function(parm_list, items, item_type, parms_estimated,
@@ -7,7 +7,7 @@ mnlfa_postproc_item <- function(parm_list, items, item_type, parms_estimated,
 {
     item <- NULL
     I <- length(items)
-    for (ii in 1:I){
+    for (ii in 1L:I){
         parm_ii <- parm_list[[ii]]
         parm_ii <- c( parm_ii$b, parm_ii$a )
         item_ii <- paste(items[ii])

@@ -25,6 +25,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -37,26 +39,20 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">mnlfa</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3-1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4-7</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="reference/index.html">Reference</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/alexanderrobitzsch/mnlfa/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+  <a href="https://github.com/alexanderrobitzsch/mnlfa/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -72,83 +68,85 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="mnlfa" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#mnlfa" class="anchor"></a>mnlfa</h1></div>
-<div id="moderated-nonlinear-factor-analysis" class="section level4">
-<h4 class="hasAnchor">
-<a href="#moderated-nonlinear-factor-analysis" class="anchor"></a>Moderated Nonlinear Factor Analysis</h4>
-<p>If you use <code>mnlfa</code> and have suggestions for improvement or have found bugs, please email me at <script type="text/javascript">
-<!--
-h='&#x69;&#112;&#110;&#46;&#x75;&#110;&#x69;&#x2d;&#x6b;&#x69;&#x65;&#108;&#46;&#100;&#x65;';a='&#64;';n='&#114;&#x6f;&#98;&#x69;&#116;&#122;&#x73;&#x63;&#104;';e=n+a+h;
-document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'" clas'+'s="em' + 'ail">'+e+'<\/'+'a'+'>');
-// -->
-</script></p>
-<noscript>robitzsch at ipn dot uni-kiel dot de</noscript>.
+<div class="section level1">
+<div class="page-header"><h1 id="mnlfa">mnlfa<a class="anchor" aria-label="anchor" href="#mnlfa"></a>
+</h1></div>
+<div class="section level4">
+<h4 id="moderated-nonlinear-factor-analysis">Moderated Nonlinear Factor Analysis<a class="anchor" aria-label="anchor" href="#moderated-nonlinear-factor-analysis"></a>
+</h4>
+<p>If you use <code>mnlfa</code> and have suggestions for improvement or have found bugs, please email me at <a href="mailto:robitzsch@leibniz-ipn.de" class="email">robitzsch@leibniz-ipn.de</a>. Please always provide a minimal dataset, necessary to demonstrate the problem, a minimal runnable code necessary to reproduce the issue, which can be run on the given dataset, and all necessary information on the used librarys, the R version, and the OS it is run on, perhaps a sessionInfo().</p>
 </div>
-<div id="manual" class="section level4">
-<h4 class="hasAnchor">
-<a href="#manual" class="anchor"></a>Manual</h4>
-<p>The manual may be found here <a href="https://alexanderrobitzsch.github.io/mnlfa/"></a><a href="https://alexanderrobitzsch.github.io/mnlfa/" class="uri">https://alexanderrobitzsch.github.io/mnlfa/</a></p>
+<div class="section level4">
+<h4 id="manual">Manual<a class="anchor" aria-label="anchor" href="#manual"></a>
+</h4>
+<p>The manual may be found here <a href="https://alexanderrobitzsch.github.io/mnlfa/" class="external-link">https://alexanderrobitzsch.github.io/mnlfa/</a></p>
 </div>
-<div id="cran-version" class="section level4">
-<h4 class="hasAnchor">
-<a href="#cran-version" class="anchor"></a>CRAN version</h4>
+<div class="section level4">
+<h4 id="cran-version">CRAN version<a class="anchor" aria-label="anchor" href="#cran-version"></a>
+</h4>
 <!---
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version-last-release/mnlfa)](https://cran.r-project.org/package=mnlfa)
 &#160;&#160;
 -->
-<p>The official version of <code>mnlfa</code> is hosted on CRAN and may be found <a href="https://cran.r-project.org/package=mnlfa">here</a>. The CRAN version can be installed from within R using:</p>
-<pre class="r"><span class="kw pkg">utils</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"mnlfa"</span>)</pre>
+<p>The official version of <code>mnlfa</code> is hosted on CRAN and may be found <a href="https://cran.r-project.org/package=mnlfa" class="external-link">here</a>. The CRAN version can be installed from within R using:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"mnlfa"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="github-version" class="section level4">
-<h4 class="hasAnchor">
-<a href="#github-version" class="anchor"></a>GitHub version</h4>
-<p>The version hosted <a href="https://github.com/alexanderrobitzsch/mnlfa">here</a> is the development version of <code>mnlfa</code>. The GitHub version can be installed using <code>devtools</code> as:</p>
-<pre class="r"><span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html">install_github</a></span>(<span class="st">"alexanderrobitzsch/mnlfa"</span>)</pre>
+<div class="section level4">
+<h4 id="github-version">GitHub version<a class="anchor" aria-label="anchor" href="#github-version"></a>
+</h4>
+<p>The version hosted <a href="https://github.com/alexanderrobitzsch/mnlfa" class="external-link">here</a> is the development version of <code>mnlfa</code>. The GitHub version can be installed using <code>devtools</code> as:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"alexanderrobitzsch/mnlfa"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=mnlfa">https://​cloud.r-project.org/​package=mnlfa</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/alexanderrobitzsch/mnlfa/">https://​github.com/​alexanderrobitzsch/​mnlfa/​</a>
-</li>
+<li><a href="https://cloud.r-project.org/package=mnlfa" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/alexanderrobitzsch/mnlfa/" class="external-link">Browse source code</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li>GPL (&gt;= 2)</li>
 </ul>
 </div>
+
+
 <div class="citation">
-<h2>Citation</h2>
+<h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li><a href="authors.html">Citing mnlfa</a></li>
+<li><a href="authors.html#citation">Citing mnlfa</a></li>
 </ul>
 </div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Alexander Robitzsch <br><small class="roles"> Maintainer </small>  </li>
 </ul>
 </div>
+
+
 
   </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Alexander Robitzsch.</p>
+  <p></p>
+<p>Developed by Alexander Robitzsch.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
@@ -156,6 +154,8 @@ document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'" clas'+'s="em' + 'ail">'+e+'<\
 
   
 
+
+  
 
   </body>
 </html>

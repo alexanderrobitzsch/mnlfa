@@ -1,7 +1,8 @@
 ## File Name: mnlfa_proc_data.R
-## File Version: 0.20
+## File Version: 0.213
 
-mnlfa_proc_data <- function(dat, items, item_type, formula_mean, formula_sd, parm_trait_init)
+mnlfa_proc_data <- function(dat, items, item_type, formula_mean, formula_sd,
+            parm_trait_init)
 {
     resp <- dat[,items]
     N <- nrow(resp)
@@ -20,10 +21,10 @@ mnlfa_proc_data <- function(dat, items, item_type, formula_mean, formula_sd, par
     mu <- rep(0,ncol(Xdes_mean))
     n_mu <- length(mu)
     if (n_mu>0){
-        names(mu) <- paste0("mu_", colnames(Xdes_mean))
+        names(mu) <- paste0('mu_', colnames(Xdes_mean))
     }
     sigma <- rep(0,ncol(Xdes_sd))
-    names(sigma) <- paste0("sigma_", colnames(Xdes_sd))
+    names(sigma) <- paste0('sigma_', colnames(Xdes_sd))
     if ( is.null(parm_trait_init) ){
         parm_trait <- list(mu=mu, sigma=sigma)
         parm_trait$index$mu <- seq_len(n_mu)
@@ -32,7 +33,8 @@ mnlfa_proc_data <- function(dat, items, item_type, formula_mean, formula_sd, par
         parm_trait <- parm_trait_init
     }
     #-- output
-    res <- list(resp=resp, N=N, I=I, resp_ind=resp_ind, item_type=item_type, N_item=N_item,
-                    Xdes_mean=Xdes_mean, Xdes_sd=Xdes_sd, parm_trait=parm_trait)
+    res <- list(resp=resp, N=N, I=I, resp_ind=resp_ind, item_type=item_type,
+                    N_item=N_item, Xdes_mean=Xdes_mean, Xdes_sd=Xdes_sd,
+                    parm_trait=parm_trait)
     return(res)
 }

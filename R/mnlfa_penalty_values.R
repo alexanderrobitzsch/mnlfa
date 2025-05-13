@@ -1,5 +1,5 @@
 ## File Name: mnlfa_penalty_values.R
-## File Version: 0.16
+## File Version: 0.171
 
 
 mnlfa_penalty_values <- function(parms, parms_indices, regular_type, regular_lam, N_item,
@@ -10,7 +10,7 @@ mnlfa_penalty_values <- function(parms, parms_indices, regular_type, regular_lam
     val <- rep(0,NI)
     regularized <- rep(0,NI)
     estimated <- rep(1,NI)
-    if (regular_type !="none"){
+    if (regular_type !='none'){
         if ( NI > 1 ){
             x_norm <- sqrt(sum(x^2))
             if (center_group_parms){

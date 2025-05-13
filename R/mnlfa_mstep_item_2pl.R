@@ -1,5 +1,5 @@
 ## File Name: mnlfa_mstep_item_2pl.R
-## File Version: 0.510
+## File Version: 0.557
 
 
 mnlfa_mstep_item_2pl <- function(y, y_resp, theta, parms, Xdes_int,
@@ -35,14 +35,16 @@ mnlfa_mstep_item_2pl <- function(y, y_resp, theta, parms, Xdes_int,
 
     #*** penalty values
     res <- mnlfa_penalty_values_item( parms=parms, parms_iterations=parms_iterations,
-                parms_regular_types=parms_regular_types, parms_regular_lam=parms_regular_lam,
-                N_item=N_item, center_group_parms=center_group_parms )
+                    parms_regular_types=parms_regular_types,
+                    parms_regular_lam=parms_regular_lam,
+                    N_item=N_item, center_group_parms=center_group_parms )
     parms_values <- res$parms_values
     parms_regularized <- res$parms_regularized
     parms_estimated <- res$parms_estimated
 
     #--- output
-    res <- list( parms=parms, iter_mstep=iter - 1, parms_change=change, parms_values=parms_values,
-                    parms_regularized=parms_regularized, parms_estimated=parms_estimated )
+    res <- list( parms=parms, iter_mstep=iter - 1, parms_change=change,
+                        parms_values=parms_values, parms_regularized=parms_regularized,
+                        parms_estimated=parms_estimated )
     return(res)
 }
