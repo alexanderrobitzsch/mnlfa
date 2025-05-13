@@ -1,15 +1,16 @@
 ## File Name: mnlfa_mstep_item_loglike_2pl_update_parameters.R
-## File Version: 0.304
+## File Version: 0.305
 
 
 mnlfa_mstep_item_loglike_2pl_update_parameters <- function(y, y_resp, theta, parms,
         Xdes_int, Xdes_slo, post, b_index, a_index, parms_indices, h, N_item,
-        regular_type, regular_lam, center_group_parms, eps=1E-15, L_max=.25 )
+        regular_type, regular_lam, center_group_parms, eps=1E-15, L_max=.25,
+        numdiff=TRUE)
 {
     res <- mnlfa_mstep_item_loglike_2pl_deriv( y=y, y_resp=y_resp, theta=theta,
                 parms=parms, Xdes_int=Xdes_int, Xdes_slo=Xdes_slo, post=post,
                 b_index=b_index, a_index=a_index, parms_indices=parms_indices,
-                h=h, N_item=N_item, eps=eps )
+                h=h, N_item=N_item, eps=eps, numdiff=numdiff )
     incr <- res$incr
     L <- max( res$D2_max, L_max)
     ll <- res$ll

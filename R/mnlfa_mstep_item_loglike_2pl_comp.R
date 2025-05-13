@@ -1,5 +1,5 @@
 ## File Name: mnlfa_mstep_item_loglike_2pl_comp.R
-## File Version: 0.213
+## File Version: 0.217
 
 mnlfa_mstep_item_loglike_2pl_comp <- function(y, y_resp, theta, b_ii, a_ii, Xdes_int,
             Xdes_slo, post, N_item, eps=1E-15 )

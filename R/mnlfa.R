@@ -1,5 +1,5 @@
 ## File Name: mnlfa.R
-## File Version: 0.663
+## File Version: 0.665
 
 mnlfa <- function( dat, items, item_type="2PL", formula_int=~1, formula_slo=~1,
     formula_mean=~0, formula_sd=~0, theta=NULL, parm_list_init=NULL,
@@ -7,7 +7,7 @@ mnlfa <- function( dat, items, item_type="2PL", formula_int=~1, formula_slo=~1,
     regular_type=c("none","none"), maxit=1000, msteps=4, conv=1E-5, conv_mstep=1E-4,
     h=1E-4, parms_regular_types=NULL, parms_regular_lam=NULL,
     parms_iterations=NULL, center_parms=NULL, center_max_iter=6,
-    L_max=.07, verbose=TRUE)
+    L_max=.07, verbose=TRUE, numdiff=FALSE)
 {
     CALL <- match.call()
     s1 <- Sys.time()
@@ -109,7 +109,7 @@ mnlfa <- function( dat, items, item_type="2PL", formula_int=~1, formula_slo=~1,
                         parms_regular_types=parms_regular_types[[ii]],
                         parms_regular_lam=parms_regular_lam[[ii]],
                         center_group_parms=center_group_parms, msteps=msteps,
-                        conv_mstep=conv_mstep, eps=1E-15, L_max=L_max )
+                        conv_mstep=conv_mstep, eps=1E-15, L_max=L_max, numdiff=numdiff )
             parm_list[[ii]]$b <- res$parms[ b_index ]
             parm_list[[ii]]$a <- res$parms[ a_index ]
             parms_values[[ii]] <- res$parms_values

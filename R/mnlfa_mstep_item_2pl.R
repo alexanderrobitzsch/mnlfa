@@ -1,11 +1,11 @@
 ## File Name: mnlfa_mstep_item_2pl.R
-## File Version: 0.557
+## File Version: 0.563
 
 
 mnlfa_mstep_item_2pl <- function(y, y_resp, theta, parms, Xdes_int,
         Xdes_slo, post,    b_index, a_index, parms_iterations, h, N_item,
         parms_regular_types, parms_regular_lam, center_group_parms, msteps,
-        conv_mstep, eps=1E-15, L_max=.25 )
+        conv_mstep, eps=1E-15, L_max=.25, numdiff=TRUE )
 {
     NH <- length(parms_iterations)
     iterate <- TRUE
@@ -23,7 +23,8 @@ mnlfa_mstep_item_2pl <- function(y, y_resp, theta, parms, Xdes_int,
                         Xdes_slo=Xdes_slo, post=post, b_index=b_index,
                         a_index=a_index, parms_indices=parms_indices, h=h, N_item=N_item,
                         regular_type=regular_type, regular_lam=regular_lam,
-                        center_group_parms=center_group_parms, eps=eps, L_max=L_max )
+                        center_group_parms=center_group_parms, eps=eps, L_max=L_max,
+                        numdiff=numdiff)
             res <- do.call( what=fct_mstep, args=args )
             parms <- res$parms
         }

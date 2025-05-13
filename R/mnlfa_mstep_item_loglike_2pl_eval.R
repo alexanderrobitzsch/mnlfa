@@ -1,9 +1,9 @@
 ## File Name: mnlfa_mstep_item_loglike_2pl_eval.R
-## File Version: 0.123
+## File Version: 0.125
 
 
 mnlfa_mstep_item_loglike_2pl_eval <- function(y, y_resp, theta, parms, Xdes_int,
-        Xdes_slo, post,    b_index, a_index, N_item, eps=1E-15 )
+        Xdes_slo, post, b_index, a_index, N_item, eps=1E-15 )
 {
     b_ii <- parms[ b_index ]
     a_ii <- parms[ a_index ]

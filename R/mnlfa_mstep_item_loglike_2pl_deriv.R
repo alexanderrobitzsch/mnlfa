@@ -1,33 +1,59 @@
 ## File Name: mnlfa_mstep_item_loglike_2pl_deriv.R
-## File Version: 0.214
+## File Version: 0.226
 
 
 mnlfa_mstep_item_loglike_2pl_deriv <- function(y, y_resp, theta, parms, Xdes_int,
-        Xdes_slo, post,    b_index, a_index, parms_indices, h, N_item, eps=1E-15 )
+        Xdes_slo, post, b_index, a_index, parms_indices, h, N_item, eps=1E-15,
+        numdiff=TRUE)
 {
-    args <- list( y=y, y_resp=y_resp, theta=theta, parms=parms, Xdes_int=Xdes_int,
-                    Xdes_slo=Xdes_slo, post=post, b_index=b_index, a_index=a_index,
-                    N_item=N_item, eps=eps )
-    fct <- 'mnlfa_mstep_item_loglike_2pl_eval'
-    ll0 <- do.call( what=fct, args)
+
     NP <- length(parms_indices)
-    ll1 <- rep(NA,NP)
-    ll2 <- rep(NA,NP)
-    parms0 <- parms
-    for (pp in 1L:NP){
-        parms1 <- parms0
-        parms1[ parms_indices[pp] ] <- parms0[ parms_indices[pp] ] + h
-        args$parms <- parms1
-        ll1[pp] <- do.call( what=fct, args)
-        parms1[ parms_indices[pp] ] <- parms0[ parms_indices[pp] ] - h
-        args$parms <- parms1
-        ll2[pp] <- do.call( what=fct, args)
+    if (NP>1){
+        numdiff <- TRUE
     }
-    #-- compute derivatives
-    res <- mnlfa_differences_derivative(ll0=ll0, ll1=ll1, ll2=ll2, h=h)
+
+    ll0 <- NULL
+
+    if (numdiff){
+
+        args <- list( y=y, y_resp=y_resp, theta=theta, parms=parms, Xdes_int=Xdes_int,
+                            Xdes_slo=Xdes_slo, post=post, b_index=b_index, a_index=a_index,
+                            N_item=N_item, eps=eps )
+        fct <- 'mnlfa_mstep_item_loglike_2pl_eval'
+        ll0 <- do.call( what=fct, args)
+
+
+        ll1 <- rep(NA,NP)
+        ll2 <- rep(NA,NP)
+        parms0 <- parms
+
+        for (pp in 1L:NP){
+            parms1 <- parms0
+            parms1[ parms_indices[pp] ] <- parms0[ parms_indices[pp] ] + h
+            args$parms <- parms1
+            ll1[pp] <- do.call( what=fct, args)
+            parms1[ parms_indices[pp] ] <- parms0[ parms_indices[pp] ] - h
+            args$parms <- parms1
+            ll2[pp] <- do.call( what=fct, args)
+        }
+        #-- compute derivatives
+        res <- mnlfa_differences_derivative(ll0=ll0, ll1=ll1, ll2=ll2, h=h)
+    }
+
+
+    #-- analytical derivative
+    if (!numdiff){
+        res <- mnlfa_mstep_item_loglike_2pl_deriv_analytical( parms=parms,
+                        a_index=a_index, b_index=b_index, Xdes_int=Xdes_int,
+                        Xdes_slo=Xdes_slo, theta=theta, parms_indices=parms_indices,
+                        N_item=N_item, y=y, y_resp=y_resp, post=post )
+    }
+
     D1 <- res$D1
     D2 <- res$D2
     D2_max <- res$D2_max
+
+
     #-- updates
     incr <- D1 / D2_max
     #-- output

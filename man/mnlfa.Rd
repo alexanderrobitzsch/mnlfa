@@ -1,5 +1,5 @@
 %% File Name: mnlfa.Rd
-%% File Version: 0.337
+%% File Version: 0.341
 
 \name{mnlfa}
 \alias{mnlfa}
@@ -26,7 +26,7 @@ mnlfa(dat, items, item_type="2PL", formula_int=~1, formula_slo=~1, formula_mean=
    regular_lam=c(0, 0), regular_type=c("none", "none"), maxit=1000, msteps=4, conv=1e-05,
    conv_mstep=1e-04, h=1e-04, parms_regular_types=NULL, parms_regular_lam=NULL,
    parms_iterations=NULL, center_parms=NULL, center_max_iter=6, L_max=.07,
-   verbose=TRUE)
+   verbose=TRUE, numdiff=FALSE)
 
 \method{summary}{mnlfa}(object, file=NULL, \dots)
 }
@@ -103,6 +103,8 @@ should be centered during initial iterations.}
 \item{verbose}{
 Logical indicating whether output should be printed
 }
+\item{numdiff}{Logical indicating whether numerical differentiation
+should be used}
 \item{object}{Object of class \code{mnlfa}}
 \item{file}{Optional file name}
 \item{\dots}{Further arguments to be passed}
