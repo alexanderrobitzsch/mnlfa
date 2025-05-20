@@ -1,25 +1,28 @@
 Package: mnlfa
 Type: Package
 Title: Moderated Nonlinear Factor Analysis
-Version: 0.4-10
-Date: 2025-05-13 16:02:14
-Author: Alexander Robitzsch [aut,cre] (<https://orcid.org/0000-0002-8226-3132>)
+Version: 0.4-35
+Date: 2025-05-20 10:45:54
+Authors@R: c( person(given = "Alexander",
+                    family = "Robitzsch",
+                    role = c("aut", "cre"),
+                    email = "robitzsch@ipn.uni-kiel.de",
+                    comment = c(ORCID = "0000-0002-8226-3132")) )
 Maintainer: Alexander Robitzsch <robitzsch@ipn.uni-kiel.de>
 Description: 
     Conducts moderated nonlinear factor analysis (e.g., Curran et al., 2014,
-    <doi:10.1080/00273171.2014.889594>). 
-    Regularization methods are implemented for assessing non-invariant items. 
-    Currently, the package includes dichotomous items and unidimensional
-    item response models. Extensions will be included in future package
-    versions.
+    <doi:10.1080/00273171.2014.889594>). Regularization methods are implemented 
+    for assessing non-invariant items. The package includes undimensional
+    factor models for dichotomous (1PL/2PL), polytomous (GPCM) and 
+    continuous (normal distribution) items.
 Depends:
     R (>= 3.1)
 Imports:
-    CDM (>= 7.0-4), stats, utils
+    CDM (>= 7.0-4), sirt, stats, utils
 LinkingTo: 
     Rcpp, RcppArmadillo
 Enhances:
-    aMNLFA, GPCMlasso, sirt
+    aMNLFA, GPCMlasso
 URL: 
     https://github.com/alexanderrobitzsch/mnlfa,
     https://sites.google.com/view/alexander-robitzsch/software

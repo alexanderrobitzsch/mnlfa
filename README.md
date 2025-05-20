@@ -25,9 +25,9 @@ The CRAN version can be installed from within R using:
 utils::install.packages("mnlfa")
 ```
 
-#### GitHub version `mnlfa` 0.4-10 (2025-05-13)
+#### GitHub version `mnlfa` 0.4-35 (2025-05-20)
 
-[![](https://img.shields.io/badge/github%20version-0.4--10-orange.svg)](https://github.com/alexanderrobitzsch/mnlfa)&#160;&#160;
+[![](https://img.shields.io/badge/github%20version-0.4--35-orange.svg)](https://github.com/alexanderrobitzsch/mnlfa)&#160;&#160;
 
 The version hosted [here](https://github.com/alexanderrobitzsch/mnlfa) is the development version of `mnlfa`. 
 The GitHub version can be installed using `devtools` as:

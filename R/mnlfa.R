@@ -1,16 +1,18 @@
 ## File Name: mnlfa.R
-## File Version: 0.665
+## File Version: 0.767
 
-mnlfa <- function( dat, items, item_type="2PL", formula_int=~1, formula_slo=~1,
-    formula_mean=~0, formula_sd=~0, theta=NULL, parm_list_init=NULL,
-    parm_trait_init=NULL, prior_init=NULL, regular_lam=c(0,0),
-    regular_type=c("none","none"), maxit=1000, msteps=4, conv=1E-5, conv_mstep=1E-4,
-    h=1E-4, parms_regular_types=NULL, parms_regular_lam=NULL,
+mnlfa <- function( dat, items, weights=NULL, item_type="2PL", formula_int=~1,
+    formula_slo=~1, formula_res=~1, formula_mean=~0, formula_sd=~0, theta=NULL,
+    parm_list_init=NULL, parm_trait_init=NULL, prior_init=NULL,
+    regular_lam=c(0,0,0), regular_alpha=c(0,0,0), regular_type=c("none","none","none"),
+    maxit=1000, msteps=4, conv=1E-5, conv_mstep=1E-4, h=1E-4,
+    parms_regular_types=NULL, parms_regular_lam=NULL, parms_regular_alpha=NULL,
     parms_iterations=NULL, center_parms=NULL, center_max_iter=6,
     L_max=.07, verbose=TRUE, numdiff=FALSE)
 {
     CALL <- match.call()
     s1 <- Sys.time()
+    mstep_shortcut <- FALSE
 
     #- theta design matrix
     res <- mnlfa_proc_theta_design(theta=theta)
@@ -20,7 +22,7 @@ mnlfa <- function( dat, items, item_type="2PL", formula_int=~1, formula_slo=~1,
     #- data processing
     res <- mnlfa_proc_data( dat=dat, items=items, item_type=item_type,
                 formula_mean=formula_mean, formula_sd=formula_sd,
-                parm_trait_init=parm_trait_init )
+                parm_trait_init=parm_trait_init, weights=weights )
     resp <- res$resp
     N <- res$N
     I <- res$I
@@ -30,18 +32,23 @@ mnlfa <- function( dat, items, item_type="2PL", formula_int=~1, formula_slo=~1,
     Xdes_mean <- res$Xdes_mean
     Xdes_sd <- res$Xdes_sd
     parm_trait <- res$parm_trait
+    weights <- res$weights
+    K <- res$K
 
     #- inits item parameters
     res <- mnlfa_proc_item_parameters( dat=dat, formula_int=formula_int,
-                formula_slo=formula_slo, item_type=item_type,
+                formula_slo=formula_slo, formula_res=formula_res, item_type=item_type,
                 parms_regular_types=parms_regular_types,
-                parms_regular_lam=parms_regular_lam, regular_type=regular_type,
-                regular_lam=regular_lam, parms_iterations=parms_iterations,
-                parm_list_init=parm_list_init)
+                parms_regular_lam=parms_regular_lam,
+                parms_regular_alpha=parms_regular_alpha, regular_type=regular_type,
+                regular_lam=regular_lam, regular_alpha=regular_alpha,
+                parms_iterations=parms_iterations,
+                parm_list_init=parm_list_init, K=K)
     parm_list <- res$parm_list
     parm_Xdes <- res$parm_Xdes
     parms_regular_types <- res$parms_regular_types
     parms_regular_lam <- res$parms_regular_lam
+    parms_regular_alpha <- res$parms_regular_alpha
     parms_iterations <- res$parms_iterations
     parm_index <- res$parm_index
 
@@ -63,24 +70,17 @@ mnlfa <- function( dat, items, item_type="2PL", formula_int=~1, formula_slo=~1,
     #--- begin EM algorithm
     while (iterate){
 
+        zz0 <- Sys.time()
         parm_list0 <- parm_list
         parm_trait0 <- parm_trait
-        #* compute likelihood
-        like <- matrix(1, nrow=N, ncol=TP)
-        for (ii in 1L:I){
-            b <- mnlfa_compute_moderated_parameter(Xdes=parm_Xdes[[ii]]$Xdes_int,
-                        parm=parm_list[[ii]]$b, value=0)
-            a <- mnlfa_compute_moderated_parameter(Xdes=parm_Xdes[[ii]]$Xdes_slo,
-                        parm=parm_list[[ii]]$a, value=1)
-            y <- resp[,ii]
-            y_resp <- resp_ind[,ii]
-            like_ii <- mnlfa_rcpp_calc_probs_2pl(a=a, b=b, theta=theta, y=y,
-                                y_resp=y_resp )
-            like <- like * like_ii
-        }
-        loglike <- like * prior
-        post <- loglike / rowSums(loglike)
-        ll <- sum( log( rowSums(loglike) + eps0 ) )
+
+        res <- mnlfa_compute_likelihood( resp=resp, resp_ind=resp_ind,
+                            parm_Xdes=parm_Xdes, parm_list=parm_list, prior=prior,
+                            item_type=item_type, theta=theta)
+        like <- res$like
+        post <- like / rowSums(like)
+        loglike_case <- log( rowSums(like) + eps0 )
+        ll <- sum( weights*loglike_case )
         dev <- -2*ll
         if (verbose){
             cat(disp)
@@ -97,24 +97,34 @@ mnlfa <- function( dat, items, item_type="2PL", formula_int=~1, formula_slo=~1,
         for (ii in 1L:I){
             y <- resp[,ii]
             y_resp <- resp_ind[,ii]
-            parms <- c(parm_list[[ii]]$b, parm_list[[ii]]$a )
+            parms <- c(parm_list[[ii]]$b, parm_list[[ii]]$a, parm_list[[ii]]$psi,
+                            parm_list[[ii]]$K)
             b_index <- parm_index[[ii]]$b_index
             a_index <- parm_index[[ii]]$a_index
+            psi_index <- parm_index[[ii]]$psi_index
+            K_index <- parm_index[[ii]]$K_index
             Xdes_int <- parm_Xdes[[ii]]$Xdes_int
             Xdes_slo <- parm_Xdes[[ii]]$Xdes_slo
-            res <- mnlfa_mstep_item_2pl( y=y, y_resp=y_resp, theta=theta, parms=parms,
-                        Xdes_int=Xdes_int, Xdes_slo=Xdes_slo,
-                        post=post, b_index=b_index, a_index=a_index,
-                        parms_iterations=parms_iterations[[ii]], h=h, N_item=N_item[ii],
-                        parms_regular_types=parms_regular_types[[ii]],
+            Xdes_res <- parm_Xdes[[ii]]$Xdes_res
+            item_type_ii <- item_type[ii]
+            res <- mnlfa_mstep_item( y=y, y_resp=y_resp, theta=theta, parms=parms,
+                        Xdes_int=Xdes_int, Xdes_slo=Xdes_slo, Xdes_res=Xdes_res,
+                        post=post, b_index=b_index, a_index=a_index, psi_index=psi_index,
+                        K_index=K_index, parms_iterations=parms_iterations[[ii]], h=h,
+                        N_item=N_item[ii], parms_regular_types=parms_regular_types[[ii]],
                         parms_regular_lam=parms_regular_lam[[ii]],
+                        parms_regular_alpha=parms_regular_alpha[[ii]],
                         center_group_parms=center_group_parms, msteps=msteps,
-                        conv_mstep=conv_mstep, eps=1E-15, L_max=L_max, numdiff=numdiff )
+                        conv_mstep=conv_mstep, eps=1E-15, L_max=L_max, numdiff=numdiff,
+                        mstep_shortcut=mstep_shortcut, weights=weights,
+                        item_type=item_type_ii)
             parm_list[[ii]]$b <- res$parms[ b_index ]
             parm_list[[ii]]$a <- res$parms[ a_index ]
+            parm_list[[ii]]$psi <- res$parms[ psi_index ]
             parms_values[[ii]] <- res$parms_values
             parms_regularized[[ii]] <- res$parms_regularized
             parms_estimated[[ii]] <- res$parms_estimated
+
             # if (verbose){
             if (FALSE){
                 cat('.')
@@ -132,7 +142,7 @@ mnlfa <- function( dat, items, item_type="2PL", formula_int=~1, formula_slo=~1,
                     parms <- c(parm_list[[ii]]$b, parm_list[[ii]]$a )
                     parms_center[ii] <- parms[center_ll[ii]]
                 }
-                mpc <- mean(parms_center, na.rm=TRUE)
+                mpc <- stats::weighted.mean(parms_center, w=weights, na.rm=TRUE)
                 parms_center <- parms_center - mpc
                 for (ii in 1L:I){
                     parms <- c(parm_list[[ii]]$b, parm_list[[ii]]$a )
@@ -169,21 +179,52 @@ mnlfa <- function( dat, items, item_type="2PL", formula_int=~1, formula_slo=~1,
         sigma <- parm_trait$sigma
         index_mu <- parm_trait$index$mu
         index_sigma <- parm_trait$index$sigma
-        trait_regression_unidim <- function(x){
+        fun_trait_regression_unidim <- function(x)
+        {
             mu <- x[ index_mu ]
             sigma <- x[ index_sigma ]
             mu_p <- Xdes_mean %*% mu
             sigma_p <- exp( Xdes_sd %*% sigma )
-            val <- - mnlfa_rcpp_mstep_trait_unidim( theta=theta, mu_p=mu_p,
-                            sigma_p=sigma_p, post=post )
+            val <- - mnlfa_rcpp_mstep_trait_unidim_fun( theta=theta, mu_p=mu_p,
+                            sigma_p=sigma_p, post=post, weights=weights )
             return(val)
         }
         par <- c(mu, sigma)
         n_parm_trait <- length(par)
-        res <- stats::nlminb( start=par, objective=trait_regression_unidim,
-                                control=list(maxit=msteps) )
-        parm_trait$mu <- res$par[ index_mu ]
-        parm_trait$sigma <- res$par[ index_sigma ]
+        use_rcpp <- TRUE
+        #    use_rcpp <- FALSE
+
+        grad_trait_regression_unidim <- function(x)
+        {
+            grad <- mnlfa_grad_trait_regression_unidim(x=par, post=post, theta=theta,
+                        Xdes_mean=Xdes_mean, Xdes_sd=Xdes_sd,
+                        index_mu=index_mu, index_sigma=index_sigma,
+                        weights=weights, use_rcpp=use_rcpp)
+            return(grad)
+        }
+
+        objective <- fun_trait_regression_unidim
+        gradient <- grad_trait_regression_unidim
+        # gradient <- NULL
+
+        # optimizer <- 'nlminb'
+        optimizer <- 'optim'
+
+        if (parm_trait$npar>0){
+
+            if (optimizer=='nlminb'){
+                res <- stats::nlminb( start=par, objective=objective, gradient=gradient,
+                                        control=list(maxit=msteps) )
+            }
+            if (optimizer=='optim'){
+                res <- stats::optim( par=par, fn=objective, gr=gradient,
+                                        method='BFGS', control=list(maxit=msteps) )
+            }
+
+            parm_trait$mu <- res$par[ index_mu ]
+            parm_trait$sigma <- res$par[ index_sigma ]
+
+        }
 
         parm_change_trait <- max( abs( unlist(parm_trait0) - unlist(parm_trait) ) )
         parm_change <- max(parm_change_item, parm_change_trait)
@@ -194,14 +235,8 @@ mnlfa <- function( dat, items, item_type="2PL", formula_int=~1, formula_slo=~1,
         }
 
         #* compute prior distribution
-        mu_p <- Xdes_mean %*% parm_trait$mu
-        sigma_p <- exp( Xdes_sd %*% parm_trait$sigma )
-        prior <- matrix(1, nrow=N, ncol=TP)
-        for (tt in 1L:TP){
-            prior[,tt] <- stats::dnorm(theta[rep(tt,N),1],
-                                mean=mu_p[,1], sd=sigma_p[,1] )
-        }
-        prior <- prior/rowSums(prior)
+        prior <- mnlfa_compute_prior( parm_trait=parm_trait, Xdes_mean=Xdes_mean,
+                        Xdes_sd=Xdes_sd, N=N, theta=theta )
 
         #* penalty values in optimization
         regular_penalty <- sum( unlist(parms_values) )
@@ -232,15 +267,16 @@ mnlfa <- function( dat, items, item_type="2PL", formula_int=~1, formula_slo=~1,
     item <- mnlfa_postproc_item( parm_list=parm_list, items=items, item_type=item_type,
                 parms_estimated=parms_estimated, parms_regularized=parms_regularized,
                 parms_regular_types=parms_regular_types,
-                parms_regular_lam=parms_regular_lam )
+                parms_regular_lam=parms_regular_lam,
+                parms_regular_alpha=parms_regular_alpha)
 
     #-- collect parameters of trait distribution
     trait <- mnlfa_postproc_trait(parm_trait=parm_trait)
 
-
     #-- information criteria
+    W <- sum(weights)
     ic <- list(deviance=dev, np=numb_est_pars, n=N, numb_reg_pars=numb_reg_pars,
-                    numb_est_pars=numb_est_pars)
+                    numb_est_pars=numb_est_pars, W=W)
     ic <- CDM::cdm_calc_information_criteria(ic)
 
     #--- output
@@ -249,6 +285,7 @@ mnlfa <- function( dat, items, item_type="2PL", formula_int=~1, formula_slo=~1,
     res <- list( item=item, trait=trait, parm_list=parm_list, parm_trait=parm_trait,
                     dev=dev, numb_est_pars=numb_est_pars, numb_reg_pars=numb_reg_pars,
                     ic=ic, deviance=dev, prior=prior, post=post,
+                    loglike=ll, loglike_case=loglike_case,
                     parms_regular_types=parms_regular_types,
                     parms_regular_lam=parms_regular_lam,
                     parms_iterations=parms_iterations,
@@ -259,3 +296,7 @@ mnlfa <- function( dat, items, item_type="2PL", formula_int=~1, formula_slo=~1,
     class(res) <- 'mnlfa'
     return(res)
 }
+
+
+# cat('mstep trait 2') ; zz1 <- Sys.time(); print(zz1-zz0) ; zz0 <- zz1
+

@@ -40,14 +40,19 @@ CHANGELOG mnlfa
 
 
 ------------------------------------------------------------------------
-VERSIONS mnlfa 0.4  |  2025-05-13  |  Last: mnlfa 0.4-10
+VERSIONS mnlfa 0.4  |  2025-05-20  |  Last: mnlfa 0.4-35
 ------------------------------------------------------------------------
 
-xxx   * ...
+NOTE  * included analytical derivatives for item parameter updates in
+        mnlfa()
+ADDED * included argument 'weights' in mnlfa() that allows handling of 
+        person weights in this function
+ADDED * extended mnlfa() to polytomous and continous item responses 
+        using the 'GPCM' and 'NO' item types
 
 
 DATA  * included/modified datasets: ---
-EXAMP * included/modified examples: ---
+EXAMP * included/modified examples: mnlfa (1,2,3)
 
 
 ------------------------------------------------------------------------

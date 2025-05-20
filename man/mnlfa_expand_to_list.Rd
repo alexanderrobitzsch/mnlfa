@@ -1,5 +1,5 @@
 %% File Name: mnlfa_expand_to_list.Rd
-%% File Version: 0.04
+%% File Version: 0.052
 
 \name{mnlfa_expand_to_list}
 \alias{mnlfa_expand_to_list}
@@ -54,7 +54,7 @@ A list
 formula_int <- ~1+female+age
 items <- paste0("I",1:12)
 formula_int <- mnlfa::mnlfa_expand_to_list(x=formula_int, names_list=items)
-formula_int[[1]] <- ~0
+formula_int[[1]] <- ~0      # modify model for first item
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

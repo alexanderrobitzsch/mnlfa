@@ -16,6 +16,7 @@ useDynLib(mnlfa)
 # importFrom(Rcpp, evalCpp)
 importFrom(stats, dnorm)
 importFrom(stats, model.matrix)
+importFrom(stats, weighted.mean)
 importFrom(utils, flush.console)
 importFrom(utils, packageDescription)
 
@@ -35,7 +36,7 @@ importFrom(CDM, cdm_print_summary_data_frame)
 importFrom(CDM, cdm_print_summary_information_criteria)
 importFrom(CDM, csink)
 importFrom(CDM, osink)
-
+importFrom(sirt, sirt_matrix2)
 
 
 

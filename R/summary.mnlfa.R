@@ -1,5 +1,5 @@
 ## File Name: summary.mnlfa.R
-## File Version: 0.17
+## File Version: 0.188
 
 
 summary.mnlfa <- function( object, file=NULL, ... )
@@ -29,6 +29,7 @@ summary.mnlfa <- function( object, file=NULL, ... )
     CDM::cat_paste( "Penalty", xx(), round( object$regular_penalty, 2 ), "\n" )
 
     CDM::cat_paste( "Number of persons", xx(), object$ic$n, "\n" )
+    CDM::cat_paste( "Sum of person weights", xx(), round(object$ic$W,4), "\n" )
     CDM::cat_paste( "Number of estimated parameters", xx(), object$ic$np, "\n" )
     CDM::cat_paste( "Number of regularized parameters", xx(), object$ic$numb_reg_pars, "\n\n" )
 
@@ -50,4 +51,4 @@ summary.mnlfa <- function( object, file=NULL, ... )
 
     CDM::csink( file=file )
 }
-#*******************************************************
+

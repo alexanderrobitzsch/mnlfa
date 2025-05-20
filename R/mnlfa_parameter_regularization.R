@@ -1,5 +1,5 @@
 ## File Name: mnlfa_parameter_regularization.R
-## File Version: 0.176
+## File Version: 0.178
 
 
 mnlfa_parameter_regularization <- function( parms, parms_indices, L, regular_type,

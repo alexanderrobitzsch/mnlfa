@@ -1,9 +1,10 @@
 ## File Name: mnlfa_penalty_values_item.R
-## File Version: 0.15
+## File Version: 0.165
 
 
 mnlfa_penalty_values_item <- function(parms, parms_iterations,
-    parms_regular_types, parms_regular_lam, N_item, center_group_parms)
+    parms_regular_types, parms_regular_lam, parms_regular_alpha, N_item,
+    center_group_parms)
 {
     NH <- length(parms_iterations)
     NP <- length(parms)
@@ -15,8 +16,10 @@ mnlfa_penalty_values_item <- function(parms, parms_iterations,
         parms_indices <- parms_iterations[[hh]]
         regular_type <- parms_regular_types[parms_indices][1]
         regular_lam <- parms_regular_lam[parms_indices][1]
+        regular_alpha <- parms_regular_alpha[parms_indices][1]
         res <- mnlfa_penalty_values( parms=parms, parms_indices=parms_indices,
-                    regular_type=regular_type, regular_lam=regular_lam, N_item=N_item,
+                    regular_type=regular_type, regular_lam=regular_lam,
+                    regular_alpha=regular_alpha, N_item=N_item,
                     center_group_parms=center_group_parms)
         parms_values[ parms_indices ] <- res$val
         parms_regularized[ parms_indices ] <- res$regularized

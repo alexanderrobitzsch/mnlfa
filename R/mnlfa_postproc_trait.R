@@ -1,16 +1,12 @@
 ## File Name: mnlfa_postproc_trait.R
-## File Version: 0.021
+## File Version: 0.026
 
 mnlfa_postproc_trait <- function(parm_trait)
 {
-    v1 <- parm_trait$mu
-    if ( length(v1) > 0 ){
-        trait <- data.frame(type='mu', par=names(v1), est=v1, estim=1)
-    } else {
-        trait <- data.frame(type='mu', par='mu0', est=0, estim=0)
-    }
-    v1 <- parm_trait$sigma
-    dfr1 <- data.frame(type='sigma', par=names(v1), est=v1, estim=1)
+    trait <- mnlfa_postproc_trait_parameter_table(x=parm_trait$mu, type='mu',
+                        par0='mu0', est0=0)
+    dfr1 <- mnlfa_postproc_trait_parameter_table(x=parm_trait$sigma, type='sigma',
+                        par0='sigma0', est0=0)
     trait <- rbind( trait, dfr1)
     rownames(trait) <- NULL
     return(trait)

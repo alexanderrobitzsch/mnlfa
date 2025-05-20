@@ -1,5 +1,5 @@
 %% File Name: mnlfa.Rd
-%% File Version: 0.341
+%% File Version: 0.380
 
 \name{mnlfa}
 \alias{mnlfa}
@@ -21,12 +21,13 @@ group lasso can be used for regularization.
 
 
 \usage{
-mnlfa(dat, items, item_type="2PL", formula_int=~1, formula_slo=~1, formula_mean=~0,
-   formula_sd=~0, theta=NULL, parm_list_init=NULL, parm_trait_init=NULL, prior_init=NULL,
-   regular_lam=c(0, 0), regular_type=c("none", "none"), maxit=1000, msteps=4, conv=1e-05,
+mnlfa(dat, items, weights=NULL, item_type="2PL", formula_int=~1, formula_slo=~1,
+   formula_res=~0, formula_mean=~0, formula_sd=~0, theta=NULL, parm_list_init=NULL,
+   parm_trait_init=NULL, prior_init=NULL, regular_lam=c(0,0,0), regular_alpha=c(0,0,0),
+   regular_type=c("none", "none", "none"), maxit=1000, msteps=4, conv=1e-05,
    conv_mstep=1e-04, h=1e-04, parms_regular_types=NULL, parms_regular_lam=NULL,
-   parms_iterations=NULL, center_parms=NULL, center_max_iter=6, L_max=.07,
-   verbose=TRUE, numdiff=FALSE)
+   parms_regular_alpha=NULL, parms_iterations=NULL, center_parms=NULL, center_max_iter=6,
+   L_max=.07, verbose=TRUE, numdiff=FALSE)
 
 \method{summary}{mnlfa}(object, file=NULL, \dots)
 }
@@ -38,15 +39,20 @@ Data frame with item responses
   \item{items}{
 Vector containing item names
 }
+\item{weights}{Optional vector of sampling weights for persons}
   \item{item_type}{
-String or vector of item types. Currently, only item types \code{"1PL"} or
-\code{"2PL"} can be chosen.
+String or vector of item types. The item types \code{"1PL"} or
+\code{"2PL"} for dichotomous items, \code{"GPCM"} for polytomous and \code{"NO"} for
+continuous items can be chosen.
 }
   \item{formula_int}{
 String or list with formula for item intercepts
 }
   \item{formula_slo}{
 String or list with formula for item slopes
+}
+  \item{formula_res}{
+String or list with formula for logarithms of residual standard deviations
 }
   \item{formula_mean}{
 Formula for mean of the trait distribution
@@ -64,12 +70,15 @@ Optional list of initial item parameters
 \item{parm_trait_init}{Optional list of initial parameters for trait distribution}
 \item{prior_init}{Optional matrix of prior distribution for persons}
   \item{regular_lam}{
-Vector of length two containing two general regularization
-parameters for item intercepts and item slopes
+Vector of length 2 or 3 (for \code{item_type="NO"}) containing regularization
+parameters \eqn{\lambda} for item intercepts and item slopes
 }
+\item{regular_alpha}{Vector of length 2 or 3 containing \eqn{\alpha}
+regularization parameter}
   \item{regular_type}{
 Type of regularization method. Can be \code{"none"},
-\code{"lasso"}, \code{"scad"} or \code{"mcp"}.
+\code{"lasso"}, \code{"scad"}, \code{"mcp"}, \code{"scadL2"}, \code{"ridge"} or
+\code{"elnet"}.
 }
   \item{maxit}{
 Maximum number of iterations
@@ -90,6 +99,9 @@ Numerical differentiation parameter
 Optional list containing parameter specific regularization types
 }
   \item{parms_regular_lam}{
+Optional list containing parameter specific regularization parameters
+}
+  \item{parms_regular_alpha}{
 Optional list containing parameter specific regularization parameters
 }
   \item{parms_iterations}{
@@ -122,6 +134,14 @@ Item intercepts and item slopes can be moderated by person covariates, i.e.
 \eqn{a_{pi}=\bold{W}_{pi} \bold{\alpha}_i } and
 \eqn{b_{pi}=\bold{V}_{pi} \bold{\beta}_i }. Regularization on (some of) the
 \eqn{\bold{\alpha}_i} or \eqn{\bold{\beta}_i} parameters is allowed.
+
+For polytomous item responses, the generalized partial credit model is parametrized
+as \deqn{P(X_{pi}=k | \theta_p \propto \exp ( k a_{pi} \theta_p - k b_{pi} - b_{k} }
+with \eqn{b_0=0}.
+
+For normally distributed responses, the conditional distribution of item responses
+is defined as \deqn{ X_{pi} | \theta_p \sim \mathrm{N} ( b_{pi} + a_{pi} \theta_p,
+\psi_{pi}^2 ) } Note that \eqn{\log \psi_{pi}} is modeled in this function.
 
 The model is estimated using an EM algorithm with the coordinate descent
 method during the M-step (Sun et al., 2016).
@@ -232,6 +252,16 @@ mod3 <- mnlfa::mnlfa( dat=dat, items, item_type="1PL", formula_int=formula_int,
             center_parms=center_parms, regular_lam=regular_lam, regular_type=regular_type )
 summary(mod3)
 
+# update Model 3 with initial parameters
+parm_trait_init <- mod3$parm_trait
+parm_list_init <- mod3$parm_list
+prior_init <- mod3$prior
+mod3b <- mnlfa::mnlfa( dat=dat, items, item_type="1PL", formula_int=formula_int,
+            formula_slo=formula_slo, formula_mean=formula_mean, formula_sd=formula_sd,
+            center_parms=center_parms, regular_lam=regular_lam,
+            regular_type=regular_type, parm_trait_init=parm_trait_init,
+            parm_list_init=parm_list_init, prior_init=prior_init,  )
+summary(mod3b)
 
 #***** Model 4: 1PL model with selected moderated item parameters
 
@@ -253,6 +283,85 @@ mod4 <- mnlfa::mnlfa( dat=dat, items, item_type="1PL", formula_int=formula_int,
 mod4$item
 mod4$trait
 summary(mod4)
+
+#############################################################################
+# EXAMPLE 2: Continuous items
+#############################################################################
+
+#-- simulate data
+set.seed(78)
+N <- 1000
+I <- 10
+z <- stats::runif(N, -1, 1)
+theta <- stats::rnorm(N, mean=0.3*z - .1*z^2, sd=exp(-.5+.3*z) )
+dat <- matrix(NA, nrow=N, ncol=I)
+items <- colnames(dat) <- paste0("I",1:I)
+dat <- as.data.frame(dat)
+dat$z <- z
+
+for (ii in 1L:I){
+    f <- 0.4*(ii==1)
+    dat[,ii] <- .6+-f*z^2 + (1+f*z)*theta + stats::rnorm(N, sd=exp(-.3)  )
+}
+
+#--- estimate model
+formula_mean <- ~ 0 + z
+formula_sd <- ~ 0 + z
+formula_int <- ~1+z
+formula_slo <- ~1+z
+formula_res <- ~1+z
+
+regular_type <- c("mcp","mcp","mcp")
+regular_lam <- rep(1e-3,3)
+maxit <- 10
+item_type <- "NO"
+
+mod1 <- mnlfa::mnlfa( dat=dat, items, item_type=item_type, formula_int=formula_int,
+             formula_slo=formula_slo, formula_res=formula_res, formula_mean=formula_mean,
+             formula_sd=formula_sd, maxit=maxit, regular_type=regular_type, h=1e-4,
+             regular_lam=regular_lam)
+summary(mod1)
+
+#############################################################################
+# EXAMPLE 3: Polytomous items
+#############################################################################
+
+#--- simulate data
+set.seed(78)
+N <- 2000
+I <- 8
+z <- stats::runif(N, -1, 1)
+theta <- stats::rnorm(N, mean=0.3*z, sd=exp(-0.3*z) )
+dat <- matrix(NA, nrow=N, ncol=I)
+items <- colnames(dat) <- paste0("I",1:I)
+dat <- as.data.frame(dat)
+dat$z <- z
+for (ii in 1L:I){
+    f <- 0.4*(ii \%in\% c(1,3) )
+    y <- -f*z + (1+f*z)*theta + stats::rnorm(N, sd=exp(-.3)  )
+    K <- 2 + (ii \%\% 2==0 )
+    br <- c(-Inf,seq(-1,1, len=K), Inf) + ii / I
+    y <- as.numeric( cut( y, breaks=br) )-1
+    dat[,ii] <- y
+}
+
+#--- estimate model
+formula_mean <- ~1 + z
+formula_sd <- ~1 + z
+formula_int <- ~1+z
+formula_slo <- ~1+z
+
+regular_type <- rep("scadL2",2)
+regular_lam <- rep(0.02,2)
+regular_alpha <- rep(0.5,2)
+maxit <- 10
+item_type <- "GPCM"
+
+mod1 <- mnlfa::mnlfa( dat=dat, items, item_type=item_type, formula_int=formula_int,
+             formula_slo=formula_slo, formula_mean=formula_mean,
+             formula_sd=formula_sd, maxit=maxit, regular_type=regular_type, h=1e-4,
+             regular_lam=regular_lam, regular_alpha=regular_alpha)
+summary(mod1)
 }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

@@ -1,10 +1,11 @@
 ## File Name: mnlfa_penalty_values.R
-## File Version: 0.171
+## File Version: 0.178
 
 
-mnlfa_penalty_values <- function(parms, parms_indices, regular_type, regular_lam, N_item,
-    center_group_parms )
+mnlfa_penalty_values <- function(parms, parms_indices, regular_type,
+        regular_lam, regular_alpha, N_item, center_group_parms, eps_regularized=1e-2 )
 {
+    eps <- eps_regularized
     x <- parms[ parms_indices ]
     NI <- length(x)
     val <- rep(0,NI)
@@ -21,11 +22,11 @@ mnlfa_penalty_values <- function(parms, parms_indices, regular_type, regular_lam
             regular_lam <- lam_fac*regular_lam
             x <- x_norm
         }
-        val <- cdm_penalty_values(x=x, regular_type=regular_type, regular_lam=regular_lam,
-                    regular_tau=NULL, regular_alpha=NULL)
+        val <- CDM::cdm_penalty_values(x=x, regular_type=regular_type,
+                    regular_lam=regular_lam, regular_tau=NULL,
+                    regular_alpha=regular_alpha)
         val <- N_item * val
         #** number of regularized parameters
-        eps <- 1E-5
         regularized <- sum( ( val < eps ) * ( regular_lam > 0 ) )
         estimated <- sum( val >=eps )
         if (NI > 1 ){
